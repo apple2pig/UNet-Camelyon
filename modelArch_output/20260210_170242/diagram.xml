@@ -1,0 +1,229 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="unet_architecture" name="UNet Architecture">
+    <mxGraphModel dx="2400" dy="1350" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2400" pageHeight="1800">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Input Layer -->
+        <mxCell id="group_input" value="输入层" style="swimlane;whiteSpace=wrap;html=1;fillColor=#bfdbfe;strokeColor=#1e40af;fontStyle=1;fontSize=14;fontColor=#1e3a8a;" vertex="1" parent="1">
+          <mxGeometry x="40" y="400" width="200" height="300" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_input" value="输入图像&#xa;(B, 3, H, W)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#3b82f6;fontColor=#1e3a8a;fontSize=13;" vertex="1" parent="group_input">
+          <mxGeometry x="30" y="80" width="140" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Encoder Level 1 -->
+        <mxCell id="group_enc1" value="编码器 Level 1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#b45309;fontStyle=1;fontSize=14;fontColor=#78350f;" vertex="1" parent="1">
+          <mxGeometry x="280" y="40" width="200" height="240" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_conv1" value="DoubleConv&#xa;conv1&#xa;(B, 64, H, W)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef9c3;strokeColor=#f59e0b;fontColor=#78350f;fontSize=12;" vertex="1" parent="group_enc1">
+          <mxGeometry x="30" y="50" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_pool1" value="MaxPool2d&#xa;pool1&#xa;(B, 64, H/2, W/2)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef9c3;strokeColor=#f59e0b;fontColor=#78350f;fontSize=11;" vertex="1" parent="group_enc1">
+          <mxGeometry x="30" y="140" width="140" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Encoder Level 2 -->
+        <mxCell id="group_enc2" value="编码器 Level 2" style="swimlane;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#b45309;fontStyle=1;fontSize=14;fontColor=#78350f;" vertex="1" parent="1">
+          <mxGeometry x="280" y="320" width="200" height="240" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_conv2" value="DoubleConv&#xa;conv2&#xa;(B, 128, H/2, W/2)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef9c3;strokeColor=#f59e0b;fontColor=#78350f;fontSize=11;" vertex="1" parent="group_enc2">
+          <mxGeometry x="30" y="50" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_pool2" value="MaxPool2d&#xa;pool2&#xa;(B, 128, H/4, W/4)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef9c3;strokeColor=#f59e0b;fontColor=#78350f;fontSize=11;" vertex="1" parent="group_enc2">
+          <mxGeometry x="30" y="140" width="140" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Encoder Level 3 -->
+        <mxCell id="group_enc3" value="编码器 Level 3" style="swimlane;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#b45309;fontStyle=1;fontSize=14;fontColor=#78350f;" vertex="1" parent="1">
+          <mxGeometry x="280" y="600" width="200" height="240" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_conv3" value="DoubleConv&#xa;conv3&#xa;(B, 256, H/4, W/4)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef9c3;strokeColor=#f59e0b;fontColor=#78350f;fontSize=11;" vertex="1" parent="group_enc3">
+          <mxGeometry x="30" y="50" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_pool3" value="MaxPool2d&#xa;pool3&#xa;(B, 256, H/8, W/8)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef9c3;strokeColor=#f59e0b;fontColor=#78350f;fontSize=11;" vertex="1" parent="group_enc3">
+          <mxGeometry x="30" y="140" width="140" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Encoder Level 4 -->
+        <mxCell id="group_enc4" value="编码器 Level 4" style="swimlane;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#b45309;fontStyle=1;fontSize=14;fontColor=#78350f;" vertex="1" parent="1">
+          <mxGeometry x="280" y="880" width="200" height="240" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_conv4" value="DoubleConv&#xa;conv4&#xa;(B, 512, H/8, W/8)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef9c3;strokeColor=#f59e0b;fontColor=#78350f;fontSize=11;" vertex="1" parent="group_enc4">
+          <mxGeometry x="30" y="50" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_pool4" value="MaxPool2d&#xa;pool4&#xa;(B, 512, H/16, W/16)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef9c3;strokeColor=#f59e0b;fontColor=#78350f;fontSize=10;" vertex="1" parent="group_enc4">
+          <mxGeometry x="30" y="140" width="140" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Bottleneck -->
+        <mxCell id="group_bottleneck" value="瓶颈层" style="swimlane;whiteSpace=wrap;html=1;fillColor=#fce7f3;strokeColor=#be185d;fontStyle=1;fontSize=14;fontColor=#831843;" vertex="1" parent="1">
+          <mxGeometry x="280" y="1160" width="200" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_conv5" value="DoubleConv&#xa;conv5&#xa;(B, 1024, H/16, W/16)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce7f3;strokeColor=#ec4899;fontColor=#831843;fontSize=10;" vertex="1" parent="group_bottleneck">
+          <mxGeometry x="30" y="60" width="140" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Decoder Level 1 -->
+        <mxCell id="group_dec1" value="解码器 Level 1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#d1fae5;strokeColor=#059669;fontStyle=1;fontSize=14;fontColor=#065f46;" vertex="1" parent="1">
+          <mxGeometry x="520" y="880" width="200" height="350" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_up6" value="ConvTranspose2d&#xa;up6&#xa;(B, 512, H/8, W/8)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d1fae5;strokeColor=#10b981;fontColor=#065f46;fontSize=10;" vertex="1" parent="group_dec1">
+          <mxGeometry x="30" y="50" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_merge6" value="Concat&#xa;merge6&#xa;(B, 1024, H/8, W/8)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d1fae5;strokeColor=#10b981;fontColor=#065f46;fontSize=10;" vertex="1" parent="group_dec1">
+          <mxGeometry x="30" y="140" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_conv6" value="DoubleConv&#xa;conv6&#xa;(B, 512, H/8, W/8)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d1fae5;strokeColor=#10b981;fontColor=#065f46;fontSize=10;" vertex="1" parent="group_dec1">
+          <mxGeometry x="30" y="230" width="140" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Decoder Level 2 -->
+        <mxCell id="group_dec2" value="解码器 Level 2" style="swimlane;whiteSpace=wrap;html=1;fillColor=#d1fae5;strokeColor=#059669;fontStyle=1;fontSize=14;fontColor=#065f46;" vertex="1" parent="1">
+          <mxGeometry x="760" y="600" width="200" height="350" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_up7" value="ConvTranspose2d&#xa;up7&#xa;(B, 256, H/4, W/4)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d1fae5;strokeColor=#10b981;fontColor=#065f46;fontSize=10;" vertex="1" parent="group_dec2">
+          <mxGeometry x="30" y="50" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_merge7" value="Concat&#xa;merge7&#xa;(B, 512, H/4, W/4)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d1fae5;strokeColor=#10b981;fontColor=#065f46;fontSize=10;" vertex="1" parent="group_dec2">
+          <mxGeometry x="30" y="140" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_conv7" value="DoubleConv&#xa;conv7&#xa;(B, 256, H/4, W/4)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d1fae5;strokeColor=#10b981;fontColor=#065f46;fontSize=10;" vertex="1" parent="group_dec2">
+          <mxGeometry x="30" y="230" width="140" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Decoder Level 3 -->
+        <mxCell id="group_dec3" value="解码器 Level 3" style="swimlane;whiteSpace=wrap;html=1;fillColor=#d1fae5;strokeColor=#059669;fontStyle=1;fontSize=14;fontColor=#065f46;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="320" width="200" height="350" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_up8" value="ConvTranspose2d&#xa;up8&#xa;(B, 128, H/2, W/2)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d1fae5;strokeColor=#10b981;fontColor=#065f46;fontSize=10;" vertex="1" parent="group_dec3">
+          <mxGeometry x="30" y="50" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_merge8" value="Concat&#xa;merge8&#xa;(B, 256, H/2, W/2)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d1fae5;strokeColor=#10b981;fontColor=#065f46;fontSize=10;" vertex="1" parent="group_dec3">
+          <mxGeometry x="30" y="140" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_conv8" value="DoubleConv&#xa;conv8&#xa;(B, 128, H/2, W/2)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d1fae5;strokeColor=#10b981;fontColor=#065f46;fontSize=10;" vertex="1" parent="group_dec3">
+          <mxGeometry x="30" y="230" width="140" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Decoder Level 4 -->
+        <mxCell id="group_dec4" value="解码器 Level 4" style="swimlane;whiteSpace=wrap;html=1;fillColor=#d1fae5;strokeColor=#059669;fontStyle=1;fontSize=14;fontColor=#065f46;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="40" width="200" height="350" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_up9" value="ConvTranspose2d&#xa;up9&#xa;(B, 64, H, W)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d1fae5;strokeColor=#10b981;fontColor=#065f46;fontSize=11;" vertex="1" parent="group_dec4">
+          <mxGeometry x="30" y="50" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_merge9" value="Concat&#xa;merge9&#xa;(B, 128, H, W)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d1fae5;strokeColor=#10b981;fontColor=#065f46;fontSize=11;" vertex="1" parent="group_dec4">
+          <mxGeometry x="30" y="140" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_conv9" value="DoubleConv&#xa;conv9&#xa;(B, 64, H, W)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d1fae5;strokeColor=#10b981;fontColor=#065f46;fontSize=11;" vertex="1" parent="group_dec4">
+          <mxGeometry x="30" y="230" width="140" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Output Layer -->
+        <mxCell id="group_output" value="输出层" style="swimlane;whiteSpace=wrap;html=1;fillColor=#fecaca;strokeColor=#dc2626;fontStyle=1;fontSize=14;fontColor=#991b1b;" vertex="1" parent="1">
+          <mxGeometry x="1480" y="250" width="200" height="300" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_conv10" value="Conv2d 1x1&#xa;conv10&#xa;(B, 3, H, W)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fecaca;strokeColor=#ef4444;fontColor=#991b1b;fontSize=12;" vertex="1" parent="group_output">
+          <mxGeometry x="30" y="60" width="140" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_sigmoid" value="Sigmoid&#xa;激活函数" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fecaca;strokeColor=#ef4444;fontColor=#991b1b;fontSize=12;" vertex="1" parent="group_output">
+          <mxGeometry x="30" y="150" width="140" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="node_output" value="分割掩码&#xa;(B, 3, H, W)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fecaca;strokeColor=#ef4444;fontColor=#991b1b;fontSize=12;" vertex="1" parent="group_output">
+          <mxGeometry x="30" y="230" width="140" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- Main Flow Edges -->
+        <mxCell id="edge1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#374151;strokeWidth=2;" edge="1" parent="1" source="node_input" target="node_conv1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#374151;strokeWidth=2;" edge="1" parent="1" source="node_conv1" target="node_pool1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#374151;strokeWidth=2;" edge="1" parent="1" source="node_pool1" target="node_conv2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#374151;strokeWidth=2;" edge="1" parent="1" source="node_conv2" target="node_pool2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#374151;strokeWidth=2;" edge="1" parent="1" source="node_pool2" target="node_conv3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#374151;strokeWidth=2;" edge="1" parent="1" source="node_conv3" target="node_pool3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#374151;strokeWidth=2;" edge="1" parent="1" source="node_pool3" target="node_conv4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#374151;strokeWidth=2;" edge="1" parent="1" source="node_conv4" target="node_pool4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#374151;strokeWidth=2;" edge="1" parent="1" source="node_pool4" target="node_conv5">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#374151;strokeWidth=2;" edge="1" parent="1" source="node_conv5" target="node_up6">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge11" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#374151;strokeWidth=2;" edge="1" parent="1" source="node_up6" target="node_merge6">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge12" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#374151;strokeWidth=2;" edge="1" parent="1" source="node_merge6" target="node_conv6">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge13" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#374151;strokeWidth=2;" edge="1" parent="1" source="node_conv6" target="node_up7">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge14" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#374151;strokeWidth=2;" edge="1" parent="1" source="node_up7" target="node_merge7">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge15" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#374151;strokeWidth=2;" edge="1" parent="1" source="node_merge7" target="node_conv7">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge16" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#374151;strokeWidth=2;" edge="1" parent="1" source="node_conv7" target="node_up8">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge17" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#374151;strokeWidth=2;" edge="1" parent="1" source="node_up8" target="node_merge8">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge18" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#374151;strokeWidth=2;" edge="1" parent="1" source="node_merge8" target="node_conv8">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge19" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#374151;strokeWidth=2;" edge="1" parent="1" source="node_conv8" target="node_up9">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge20" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#374151;strokeWidth=2;" edge="1" parent="1" source="node_up9" target="node_merge9">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge21" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#374151;strokeWidth=2;" edge="1" parent="1" source="node_merge9" target="node_conv9">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge22" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#374151;strokeWidth=2;" edge="1" parent="1" source="node_conv9" target="node_conv10">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge23" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#374151;strokeWidth=2;" edge="1" parent="1" source="node_conv10" target="node_sigmoid">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge24" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#374151;strokeWidth=2;" edge="1" parent="1" source="node_sigmoid" target="node_output">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Skip Connections -->
+        <mxCell id="skip1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#6b7280;strokeWidth=2;dashed=1;" edge="1" parent="1" source="node_conv4" target="node_merge6">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="skip2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#6b7280;strokeWidth=2;dashed=1;" edge="1" parent="1" source="node_conv3" target="node_merge7">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="skip3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#6b7280;strokeWidth=2;dashed=1;" edge="1" parent="1" source="node_conv2" target="node_merge8">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="skip4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#6b7280;strokeWidth=2;dashed=1;" edge="1" parent="1" source="node_conv1" target="node_merge9">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

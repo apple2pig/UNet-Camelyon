@@ -1,0 +1,486 @@
+{
+  "model_name": "Unet",
+  "model_file": "C:\\Users\\junyou.zhang\\Desktop\\Us\\UNet-Camelyon\\UNet.py:23-75",
+  "description": "U-Net architecture for semantic segmentation with encoder-decoder structure and skip connections",
+  "architecture_overview": {
+    "paradigm": "Encoder-Decoder with Skip Connections",
+    "input": "3-channel images (RGB)",
+    "output": "3-channel segmentation masks with sigmoid activation"
+  },
+  "encoder": {
+    "description": "Contracting path with 5 levels",
+    "enabled": true,
+    "levels": [
+      {
+        "name": "conv1",
+        "class_name": "DoubleConv",
+        "file": "C:\\Users\\junyou.zhang\\Desktop\\Us\\UNet-Camelyon\\UNet.py:6-20",
+        "description": "First encoder level: double convolution block",
+        "input_shape": "(B, 3, H, W)",
+        "output_shape": "(B, 64, H, W)",
+        "components": [
+          {
+            "name": "conv_1",
+            "class_name": "Conv2d",
+            "description": "3x3 convolution with replicate padding",
+            "config": {
+              "in_channels": 3,
+              "out_channels": 64,
+              "kernel_size": 3,
+              "padding": 1,
+              "padding_mode": "replicate"
+            }
+          },
+          {
+            "name": "bn_1",
+            "class_name": "BatchNorm2d",
+            "description": "Batch normalization"
+          },
+          {
+            "name": "relu_1",
+            "class_name": "ReLU",
+            "description": "ReLU activation",
+            "config": {
+              "inplace": true
+            }
+          },
+          {
+            "name": "conv_2",
+            "class_name": "Conv2d",
+            "description": "Second 3x3 convolution with replicate padding",
+            "config": {
+              "in_channels": 64,
+              "out_channels": 64,
+              "kernel_size": 3,
+              "padding": 1,
+              "padding_mode": "replicate"
+            }
+          },
+          {
+            "name": "bn_2",
+            "class_name": "BatchNorm2d",
+            "description": "Batch normalization"
+          },
+          {
+            "name": "relu_2",
+            "class_name": "ReLU",
+            "description": "ReLU activation",
+            "config": {
+              "inplace": true
+            }
+          }
+        ]
+      },
+      {
+        "name": "pool1",
+        "class_name": "MaxPool2d",
+        "description": "Max pooling to reduce spatial dimensions",
+        "input_shape": "(B, 64, H, W)",
+        "output_shape": "(B, 64, H/2, W/2)",
+        "config": {
+          "kernel_size": 2,
+          "stride": 2
+        }
+      },
+      {
+        "name": "conv2",
+        "class_name": "DoubleConv",
+        "file": "C:\\Users\\junyou.zhang\\Desktop\\Us\\UNet-Camelyon\\UNet.py:6-20",
+        "description": "Second encoder level",
+        "input_shape": "(B, 64, H/2, W/2)",
+        "output_shape": "(B, 128, H/2, W/2)",
+        "config": {
+          "in_ch": 64,
+          "out_ch": 128
+        }
+      },
+      {
+        "name": "pool2",
+        "class_name": "MaxPool2d",
+        "description": "Max pooling",
+        "input_shape": "(B, 128, H/2, W/2)",
+        "output_shape": "(B, 128, H/4, W/4)",
+        "config": {
+          "kernel_size": 2,
+          "stride": 2
+        }
+      },
+      {
+        "name": "conv3",
+        "class_name": "DoubleConv",
+        "file": "C:\\Users\\junyou.zhang\\Desktop\\Us\\UNet-Camelyon\\UNet.py:6-20",
+        "description": "Third encoder level",
+        "input_shape": "(B, 128, H/4, W/4)",
+        "output_shape": "(B, 256, H/4, W/4)",
+        "config": {
+          "in_ch": 128,
+          "out_ch": 256
+        }
+      },
+      {
+        "name": "pool3",
+        "class_name": "MaxPool2d",
+        "description": "Max pooling",
+        "input_shape": "(B, 256, H/4, W/4)",
+        "output_shape": "(B, 256, H/8, W/8)",
+        "config": {
+          "kernel_size": 2,
+          "stride": 2
+        }
+      },
+      {
+        "name": "conv4",
+        "class_name": "DoubleConv",
+        "file": "C:\\Users\\junyou.zhang\\Desktop\\Us\\UNet-Camelyon\\UNet.py:6-20",
+        "description": "Fourth encoder level",
+        "input_shape": "(B, 256, H/8, W/8)",
+        "output_shape": "(B, 512, H/8, W/8)",
+        "config": {
+          "in_ch": 256,
+          "out_ch": 512
+        }
+      },
+      {
+        "name": "pool4",
+        "class_name": "MaxPool2d",
+        "description": "Max pooling",
+        "input_shape": "(B, 512, H/8, W/8)",
+        "output_shape": "(B, 512, H/16, W/16)",
+        "config": {
+          "kernel_size": 2,
+          "stride": 2
+        }
+      }
+    ]
+  },
+  "bottleneck": {
+    "name": "conv5",
+    "class_name": "DoubleConv",
+    "file": "C:\\Users\\junyou.zhang\\Desktop\\Us\\UNet-Camelyon\\UNet.py:6-20",
+    "description": "Bottleneck layer at the deepest level",
+    "input_shape": "(B, 512, H/16, W/16)",
+    "output_shape": "(B, 1024, H/16, W/16)",
+    "config": {
+      "in_ch": 512,
+      "out_ch": 1024
+    }
+  },
+  "decoder": {
+    "description": "Expanding path with 4 levels and skip connections",
+    "enabled": true,
+    "levels": [
+      {
+        "name": "up6",
+        "class_name": "ConvTranspose2d",
+        "description": "Transposed convolution for upsampling",
+        "input_shape": "(B, 1024, H/16, W/16)",
+        "output_shape": "(B, 512, H/8, W/8)",
+        "config": {
+          "in_channels": 1024,
+          "out_channels": 512,
+          "kernel_size": 2,
+          "stride": 2
+        }
+      },
+      {
+        "name": "merge6",
+        "operation": "torch.cat",
+        "description": "Concatenate with encoder conv4 output (skip connection)",
+        "input_shape": "[(B, 512, H/8, W/8), (B, 512, H/8, W/8)]",
+        "output_shape": "(B, 1024, H/8, W/8)"
+      },
+      {
+        "name": "conv6",
+        "class_name": "DoubleConv",
+        "file": "C:\\Users\\junyou.zhang\\Desktop\\Us\\UNet-Camelyon\\UNet.py:6-20",
+        "description": "First decoder convolution block",
+        "input_shape": "(B, 1024, H/8, W/8)",
+        "output_shape": "(B, 512, H/8, W/8)",
+        "config": {
+          "in_ch": 1024,
+          "out_ch": 512
+        }
+      },
+      {
+        "name": "up7",
+        "class_name": "ConvTranspose2d",
+        "description": "Transposed convolution for upsampling",
+        "input_shape": "(B, 512, H/8, W/8)",
+        "output_shape": "(B, 256, H/4, W/4)",
+        "config": {
+          "in_channels": 512,
+          "out_channels": 256,
+          "kernel_size": 2,
+          "stride": 2
+        }
+      },
+      {
+        "name": "merge7",
+        "operation": "torch.cat",
+        "description": "Concatenate with encoder conv3 output (skip connection)",
+        "input_shape": "[(B, 256, H/4, W/4), (B, 256, H/4, W/4)]",
+        "output_shape": "(B, 512, H/4, W/4)"
+      },
+      {
+        "name": "conv7",
+        "class_name": "DoubleConv",
+        "file": "C:\\Users\\junyou.zhang\\Desktop\\Us\\UNet-Camelyon\\UNet.py:6-20",
+        "description": "Second decoder convolution block",
+        "input_shape": "(B, 512, H/4, W/4)",
+        "output_shape": "(B, 256, H/4, W/4)",
+        "config": {
+          "in_ch": 512,
+          "out_ch": 256
+        }
+      },
+      {
+        "name": "up8",
+        "class_name": "ConvTranspose2d",
+        "description": "Transposed convolution for upsampling",
+        "input_shape": "(B, 256, H/4, W/4)",
+        "output_shape": "(B, 128, H/2, W/2)",
+        "config": {
+          "in_channels": 256,
+          "out_channels": 128,
+          "kernel_size": 2,
+          "stride": 2
+        }
+      },
+      {
+        "name": "merge8",
+        "operation": "torch.cat",
+        "description": "Concatenate with encoder conv2 output (skip connection)",
+        "input_shape": "[(B, 128, H/2, W/2), (B, 128, H/2, W/2)]",
+        "output_shape": "(B, 256, H/2, W/2)"
+      },
+      {
+        "name": "conv8",
+        "class_name": "DoubleConv",
+        "file": "C:\\Users\\junyou.zhang\\Desktop\\Us\\UNet-Camelyon\\UNet.py:6-20",
+        "description": "Third decoder convolution block",
+        "input_shape": "(B, 256, H/2, W/2)",
+        "output_shape": "(B, 128, H/2, W/2)",
+        "config": {
+          "in_ch": 256,
+          "out_ch": 128
+        }
+      },
+      {
+        "name": "up9",
+        "class_name": "ConvTranspose2d",
+        "description": "Transposed convolution for upsampling",
+        "input_shape": "(B, 128, H/2, W/2)",
+        "output_shape": "(B, 64, H, W)",
+        "config": {
+          "in_channels": 128,
+          "out_channels": 64,
+          "kernel_size": 2,
+          "stride": 2
+        }
+      },
+      {
+        "name": "merge9",
+        "operation": "torch.cat",
+        "description": "Concatenate with encoder conv1 output (skip connection)",
+        "input_shape": "[(B, 64, H, W), (B, 64, H, W)]",
+        "output_shape": "(B, 128, H, W)"
+      },
+      {
+        "name": "conv9",
+        "class_name": "DoubleConv",
+        "file": "C:\\Users\\junyou.zhang\\Desktop\\Us\\UNet-Camelyon\\UNet.py:6-20",
+        "description": "Fourth decoder convolution block",
+        "input_shape": "(B, 128, H, W)",
+        "output_shape": "(B, 64, H, W)",
+        "config": {
+          "in_ch": 128,
+          "out_ch": 64
+        }
+      }
+    ]
+  },
+  "output_head": {
+    "name": "conv10",
+    "class_name": "Conv2d",
+    "description": "Final 1x1 convolution for segmentation output",
+    "input_shape": "(B, 64, H, W)",
+    "output_shape": "(B, 3, H, W)",
+    "config": {
+      "in_channels": 64,
+      "out_channels": 3,
+      "kernel_size": 1
+    },
+    "activation": {
+      "class_name": "Sigmoid",
+      "description": "Sigmoid activation for probability output",
+      "output_shape": "(B, 3, H, W)"
+    }
+  },
+  "data_flow": [
+    {
+      "from": "Input Image",
+      "to": "conv1 (DoubleConv)",
+      "shape": "(B, 3, H, W)",
+      "operation": "First encoding"
+    },
+    {
+      "from": "conv1",
+      "to": "pool1 (MaxPool2d)",
+      "shape": "(B, 64, H, W)",
+      "operation": "Spatial downsampling"
+    },
+    {
+      "from": "pool1",
+      "to": "conv2 (DoubleConv)",
+      "shape": "(B, 64, H/2, W/2)",
+      "operation": "Second encoding"
+    },
+    {
+      "from": "conv2",
+      "to": "pool2 (MaxPool2d)",
+      "shape": "(B, 128, H/2, W/2)",
+      "operation": "Spatial downsampling"
+    },
+    {
+      "from": "pool2",
+      "to": "conv3 (DoubleConv)",
+      "shape": "(B, 128, H/4, W/4)",
+      "operation": "Third encoding"
+    },
+    {
+      "from": "conv3",
+      "to": "pool3 (MaxPool2d)",
+      "shape": "(B, 256, H/4, W/4)",
+      "operation": "Spatial downsampling"
+    },
+    {
+      "from": "pool3",
+      "to": "conv4 (DoubleConv)",
+      "shape": "(B, 256, H/8, W/8)",
+      "operation": "Fourth encoding"
+    },
+    {
+      "from": "conv4",
+      "to": "pool4 (MaxPool2d)",
+      "shape": "(B, 512, H/8, W/8)",
+      "operation": "Spatial downsampling"
+    },
+    {
+      "from": "pool4",
+      "to": "conv5 (DoubleConv - Bottleneck)",
+      "shape": "(B, 512, H/16, W/16)",
+      "operation": "Bottleneck encoding"
+    },
+    {
+      "from": "conv5",
+      "to": "up6 (ConvTranspose2d)",
+      "shape": "(B, 1024, H/16, W/16)",
+      "operation": "Upsampling"
+    },
+    {
+      "from": "up6 + conv4",
+      "to": "conv6 (DoubleConv)",
+      "shape": "(B, 1024, H/8, W/8)",
+      "operation": "Skip connection concatenation and decoding"
+    },
+    {
+      "from": "conv6",
+      "to": "up7 (ConvTranspose2d)",
+      "shape": "(B, 512, H/8, W/8)",
+      "operation": "Upsampling"
+    },
+    {
+      "from": "up7 + conv3",
+      "to": "conv7 (DoubleConv)",
+      "shape": "(B, 512, H/4, W/4)",
+      "operation": "Skip connection concatenation and decoding"
+    },
+    {
+      "from": "conv7",
+      "to": "up8 (ConvTranspose2d)",
+      "shape": "(B, 256, H/4, W/4)",
+      "operation": "Upsampling"
+    },
+    {
+      "from": "up8 + conv2",
+      "to": "conv8 (DoubleConv)",
+      "shape": "(B, 256, H/2, W/2)",
+      "operation": "Skip connection concatenation and decoding"
+    },
+    {
+      "from": "conv8",
+      "to": "up9 (ConvTranspose2d)",
+      "shape": "(B, 128, H/2, W/2)",
+      "operation": "Upsampling"
+    },
+    {
+      "from": "up9 + conv1",
+      "to": "conv9 (DoubleConv)",
+      "shape": "(B, 128, H, W)",
+      "operation": "Skip connection concatenation and decoding"
+    },
+    {
+      "from": "conv9",
+      "to": "conv10 (Conv2d)",
+      "shape": "(B, 64, H, W)",
+      "operation": "Final 1x1 convolution"
+    },
+    {
+      "from": "conv10",
+      "to": "Sigmoid",
+      "shape": "(B, 3, H, W)",
+      "operation": "Probability activation"
+    },
+    {
+      "from": "Sigmoid",
+      "to": "Output Segmentation Mask",
+      "shape": "(B, 3, H, W)",
+      "operation": "Final output"
+    }
+  ],
+  "training_configuration": {
+    "loss_function": "BCELoss + DiceLoss",
+    "optimizer": "Adam",
+    "batch_size": 6,
+    "epochs": 200,
+    "learning_rate": "Default Adam LR",
+    "device": "cuda:1 or cpu"
+  },
+  "key_parameters": {
+    "batch_size": "B (typically 6)",
+    "input_channels": 3,
+    "output_channels": 3,
+    "image_size": "H x W (variable)",
+    "encoder_channels": [64, 128, 256, 512, 1024],
+    "decoder_channels": [512, 256, 128, 64],
+    "pooling_kernel": 2,
+    "upsampling_kernel": 2,
+    "conv_kernel": 3,
+    "padding": 1,
+    "padding_mode": "replicate"
+  },
+  "inference_flow": {
+    "input": {
+      "image": "(B, 3, H, W)"
+    },
+    "steps": [
+      "1. Encoder: Progressively downsample and extract features through 5 levels",
+      "2. Bottleneck: Process features at lowest resolution (1024 channels)",
+      "3. Decoder: Progressively upsample and combine with skip connections through 4 levels",
+      "4. Output: Generate 3-channel segmentation mask with sigmoid activation"
+    ],
+    "output": {
+      "segmentation_mask": "(B, 3, H, W) - Probability values [0,1] for 3 classes"
+    }
+  },
+  "notes": [
+    "Classic U-Net architecture with symmetric encoder-decoder structure",
+    "Skip connections concatenate encoder features with decoder features at same spatial resolution",
+    "Uses replicate padding to handle border effects",
+    "Batch normalization after each convolution for training stability",
+    "Sigmoid activation in output for multi-class segmentation (not mutually exclusive)",
+    "Input and output spatial dimensions are identical",
+    "Bottleneck has 1024 feature channels at 1/16 resolution",
+    "All convolutions use 3x3 kernels except final 1x1 output convolution"
+  ]
+}
