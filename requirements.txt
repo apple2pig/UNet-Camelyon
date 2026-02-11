@@ -1,0 +1,45 @@
+# Core Deep Learning Framework
+torch>=2.0.0
+torchvision>=0.15.0
+torchaudio>=2.0.0
+
+# Scientific Computing
+numpy>=1.21.0
+scipy>=1.7.0
+
+# Image Processing
+Pillow>=9.0.0
+opencv-python>=4.5.0
+scikit-image>=0.18.0
+
+# Medical Image Processing
+openslide-python>=1.1.2
+scikit-learn>=1.0.0
+
+# Model Architecture & Utilities
+segmentation-models-pytorch>=0.3.0
+
+# Data Processing & ML
+pandas>=1.3.0
+matplotlib>=3.5.0
+seaborn>=0.11.0
+
+# Progress Bar
+tqdm>=4.62.0
+
+# Model Optimization & Export
+onnx>=1.12.0
+onnxruntime>=1.13.0
+
+# Performance Monitoring (Optional)
+tensorboard>=2.10.0
+wandb>=0.13.0
+
+# Development Tools (Optional)
+jupyter>=1.0.0
+ipython>=8.0.0
+ipykernel>=6.0.0
+
+# Testing (Optional)
+pytest>=7.0.0
+pytest-cov>=4.0.0
