@@ -17,6 +17,7 @@ A deep learning project for semantic segmentation of Whole Slide Images (WSI) us
 - [Project Structure](#project-structure)
 - [Pipeline](#pipeline)
 - [Skills (Optimizations)](#skills-optimizations)
+- [Visualization Results](#visualization-results) ⭐
 - [Configuration](#configuration)
 - [Usage Examples](#usage-examples)
 - [Performance](#performance)
@@ -358,6 +359,24 @@ Output:
 - Speed comparison chart
 - Detailed statistics
 - Time estimation for large datasets
+
+---
+
+## 🖼️ Visualization Results
+
+The model generates heatmap predictions overlaid on original images:
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/90a7b38a-9ee3-4cd7-b493-200268dd7a1a" width="450" height="300" alt="Patch Prediction Example">
+  <img src="https://github.com/user-attachments/assets/e7ef4292-6b87-463e-a958-a3a9b7bfa649" width="550" height="300" alt="WSI Prediction Example">
+</p>
+
+**Left**: Patch-level prediction with heatmap overlay
+**Right**: Whole Slide Image (WSI) prediction result
+
+The heatmap uses a rainbow color scheme where:
+- 🔴 **Red/Warm colors** - High confidence predictions (positive regions)
+- 🔵 **Blue/Cool colors** - Low confidence predictions (negative regions)
 
 ---
 
